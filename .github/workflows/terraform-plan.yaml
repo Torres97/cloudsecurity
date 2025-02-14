@@ -1,4 +1,4 @@
-name: Deploy Terraform
+name: Plan Terraform
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   terraform:
-    name: Deploy Terraform Job
+    name: Plan Terraform Job
     runs-on: ubuntu-latest
 
     steps:
@@ -22,19 +22,16 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+          aws-region: us-east-1
 
-      # Initialize terraform
       - name: Initialize Terraform
         run: terraform init
 
-      # Execute the terraform plan
       - name: Terraform Plan
         run: terraform plan -out=tfplan
 
-      # Add plan as artifact
-      - name: plan artifact
-        uses: actions/upload-artifact@v3
+      - name: Upload Plan
+        uses: actions/upload-artifact@v4
         with:
           name: terraform-plan
           path: tfplan
