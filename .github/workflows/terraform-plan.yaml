@@ -7,6 +7,7 @@ on:
 
 jobs:
   terraform:
+    if: ${{ vars.ENABLE_DESTROY != 'true' }}
     name: Plan Terraform Job
     runs-on: ubuntu-latest
 

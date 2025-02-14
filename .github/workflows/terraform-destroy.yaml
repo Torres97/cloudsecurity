@@ -1,14 +1,14 @@
-name: Deploy Terraform
+name: Destroy Terraform
 
 on:
+  workflow_dispatch:  # Permitir ejecución manual
   push:
     branches:
-      - main
+      - main  # Se ejecuta cuando hay cambios en `main`
 
 jobs:
-  terraform:
-    if: ${{ vars.ENABLE_DESTROY != 'true' }}
-    name: Deploy Terraform Job
+  terraform-destroy:
+    if: ${{ vars.ENABLE_DESTROY == 'true' }}  # Solo corre si está en true
     runs-on: ubuntu-latest
 
     steps:
@@ -28,10 +28,10 @@ jobs:
       - name: Initialize Terraform
         run: terraform init
 
-      - name: Terraform Plan
-        run: terraform plan 
+      # Plan the destroy (ve lo que se va a eliminar)
+      - name: Terraform Destroy Plan
+        run: terraform plan -destroy -out=tfplan
 
-      - name: Terraform Apply
-        run: terraform apply -auto-approve 
-
-
+      # Realizar el destroy
+      - name: Terraform Destroy
+        run: terraform apply -auto-approve tfplan
