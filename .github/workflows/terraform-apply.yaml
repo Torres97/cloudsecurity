@@ -28,10 +28,11 @@ jobs:
       - name: Initialize Terraform
         run: terraform init
 
-      # Execute the terraform plan
+      # Download tf plan
       - name: Terraform Plan
-        run: terraform plan
+        uses: actions/download-artifact@v3
 
-      # Deploy terraform changes
       - name: Terraform Apply
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve tfplan
+
+
