@@ -21,5 +21,5 @@ variable "public_subnet" {
 variable "private_subnet" {
   description = "CIDR private subnet"
   type        = string
-  default     = "20.0.10.0/16"
+  default     = "20.0.0.0/16"
 }
