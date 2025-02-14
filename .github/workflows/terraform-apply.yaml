@@ -1,13 +1,13 @@
-name: Plan Terraform
+name: Deploy Terraform
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 
 jobs:
   terraform:
-    name: Plan Terraform Job
+    name: Deploy Terraform Job
     runs-on: ubuntu-latest
 
     steps:
@@ -28,10 +28,9 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        run: terraform plan -out=tfplan
+        run: terraform plan 
 
-      - name: Upload Plan
-        uses: actions/upload-artifact@v4
-        with:
-          name: terraform-plan
-          path: tfplan
+      - name: Terraform Apply
+        run: terraform apply -auto-approve 
+
+
