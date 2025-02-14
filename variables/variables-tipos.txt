@@ -1,0 +1,92 @@
+#Variable del tipo string
+variable "virginia-cidr" {
+  default = "value"
+  type = string
+  description = "Cidr block for the Virginia VPC"
+  sensitive = true #or false x defecto
+  
+}
+
+#Variable del tipo listas
+
+variable "lista_cidrs" {
+  default = ["10.10.0.0/16", "10.20.0.0/16"] #posicion 1 , #posicion 2
+  type = list(string)
+}
+
+#EJEMPLOS
+resource "aws_vpc" "vpc_virginia" {
+    cidr_block = var.lista_cidrs[0]
+    tags = {
+        Name = "Virginia VPC"
+    }
+  
+}
+
+resource "aws_vpc" "vpc_ohio" {
+    cidr_block = var.lista_cidrs[1]
+    tags = {
+        Name = "Virginia VPC"
+    }
+  provider = aws.ohio
+}
+
+#Variable del tipo MAPS
+
+variable "lista_cidrs" {
+    default = {
+        "virginia" = "10.10.0.0/16"
+        "ohio" = "10.20.0.0/16"
+    }
+    type = map(string)
+}
+
+#EJEMPLOS
+resource "aws_vpc" "vpc_virginia" {
+    cidr_block = var.lista_cidrs["virginia"]
+    tags = {
+        Name = "Virginia VPC"
+    }
+  
+}
+
+resource "aws_vpc" "vpc_ohio" {
+    cidr_block = var.lista_cidrs["ohio"]
+    tags = {
+        Name = "Virginia VPC"
+    }
+  provider = aws.ohio
+}
+
+
+#Variable del tipo object
+
+variable "virginia" {
+  type = object({
+    name = string
+    cantidad = number
+    cidrs = list(string)
+    disponible = bool
+    env = string
+    owner = string
+  })
+
+  default = {
+    cantidad = 1
+    cidrs = ["10.10.0.0/16"]
+    disponible = true
+    env = "prod"
+    name = "virginia"
+    owner = "CloudSec"
+  }
+}
+
+#EJEMPLO
+
+resource "aws_vpc" "vpc_virginia" {
+    cidr_block = var.virginia[0]
+    tags = {
+        Name = var.virginia.name
+    }
+  
+}
