@@ -24,13 +24,13 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # Initialize terraform
       - name: Initialize Terraform
         run: terraform init
 
-      # Download tf plan
-      - name: Terraform Plan
-        uses: actions/download-artifact@v3
+      - name: Download Plan
+        uses: actions/download-artifact@v4
+        with:
+          name: terraform-plan
 
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
